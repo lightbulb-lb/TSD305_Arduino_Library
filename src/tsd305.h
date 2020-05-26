@@ -64,7 +64,7 @@ private:
    *       - tsd305_status_busy : Sensor is busy
    *       - tsd305_status_memory_error : Sensor EEPROM memory error
    */
-	enum tsd305_status read_eeprom_coeff(uint8_t address, uint16_t *coeff);
+	enum tsd305_status read_EE_coeff(uint8_t address, uint16_t *coeff);
    /**	
    * \brief Reads the tsd305 EEPROM coefficient stored at address provided.
    *
@@ -77,7 +77,7 @@ private:
    *       - tsd305_status_busy : Sensor is busy
    *       - tsd305_status_memory_error : Sensor EEPROM memory error
    */
-	enum tsd305_status read_eeprom_float(uint8_t address, float *value);
+	enum tsd305_status read_EE_float(uint8_t address, float *value);
 	/**
    * \brief Triggers conversion and read ADC value
    *
@@ -103,7 +103,7 @@ private:
    *       - tsd305_status_busy : Sensor is busy
    *       - tsd305_status_memory_error : Sensor EEPROM memory error
    */
-	enum tsd305_status read_eeprom(void);
+	enum tsd305_status read_EE(void);
    /**
    * \brief Retrieve data from 2D look up table in program memory
    *
@@ -118,7 +118,7 @@ private:
     int16_t max_sensor_temperature;
     int16_t min_object_temperature;
     int16_t max_object_temperature;
-	} eeprom_coeff;
+	} EE_coeff;
 
   struct 
   {
@@ -135,5 +135,5 @@ private:
     float k2_object;
     float k1_object;
     float k0_object;    
-  } eeprom_value;
+  } EE_value;
 };

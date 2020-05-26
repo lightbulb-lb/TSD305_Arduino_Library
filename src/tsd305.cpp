@@ -63,7 +63,7 @@ bool tsd305::is_connected(void) {
  *       - tsd305_status_memory_error : Sensor EEPROM memory error
  */
 
- enum tsd305_status tsd305::read_eeprom_coeff(uint8_t address, uint16_t *coeff) {
+ enum tsd305_status tsd305::read_EE_coeff(uint8_t address, uint16_t *coeff) {
  	enum tsd305_status status;
  	enum status_code i2c_status;
  	uint8_t buffer[3];
@@ -107,13 +107,13 @@ bool tsd305::is_connected(void) {
  *       - tsd305_status_busy : Sensor is busy
  *       - tsd305_status_memory_error : Sensor EEPROM memory error
  */
- enum tsd305_status tsd305::read_eeprom_float(uint8_t address, float *value) {
+ enum tsd305_status tsd305::read_EE_float(uint8_t address, float *value) {
  	enum tsd305_status status;
  	uint16_t h_word, l_word;
  	uint32_t word;
 
- 	ASSERT_STATUS(read_eeprom_coeff(address, &h_word));
- 	ASSERT_STATUS(read_eeprom_coeff(address + 1, &l_word));
+ 	ASSERT_STATUS(read_EE_coeff(address, &h_word));
+ 	ASSERT_STATUS(read_EE_coeff(address + 1, &l_word));
 
  	word = (uint32_t)h_word << 16 | l_word;
  	*value = *(float *)&word;
@@ -124,7 +124,7 @@ bool tsd305::is_connected(void) {
 /* enum tsd305_status tsd305::read_EE_float(uint8_t address, float *value) {
  	enum tsd305_Status status;
  	for ( i = 0; i < 2; i++ )
- 		ASSERT_STATUS(read_eeprom_coeff(address + i, (float *)&MyUnion.iValue[i])); 
+ 		ASSERT_STATUS(read_EE_coeff(address + i, (float *)&MyUnion.iValue[i])); 
  } */
  /**
  * \brief Reads the tsd305 EEPROM coefficients to store them for computation.
@@ -136,27 +136,27 @@ bool tsd305::is_connected(void) {
  *       - tsd305_status_busy : Sensor is busy
  *       - tsd305_status_memory_error : Sensor EEPROM memory error
  */
- enum tsd305_status tsd305::read_eeprom(void) {
+ enum tsd305_status tsd305::read_EE(void) {
  	enum tsd305_status status = tsd305_status_ok;
 
- 	ASSERT_STATUS(read_eeprom_coeff(0x00, &eeprom_coeff.lot_number));
- 	ASSERT_STATUS(read_eeprom_coeff(0x01, &eeprom_coeff.serial_number));
- 	ASSERT_STATUS(read_eeprom_coeff(0x1a, (uint16_t *)&eeprom_coeff.min_sensor_temperature));
- 	ASSERT_STATUS(read_eeprom_coeff(0x1b, (uint16_t *)&eeprom_coeff.max_sensor_temperature));
- 	ASSERT_STATUS(read_eeprom_coeff(0x1c, (uint16_t *)&eeprom_coeff.min_object_temperature));
- 	ASSERT_STATUS(read_eeprom_coeff(0x1d, (uint16_t *)&eeprom_coeff.max_object_temperature));
- 	ASSERT_STATUS(read_eeprom_float(0x1e, (float *)&eeprom_value.temperature_coefficient));
-    ASSERT_STATUS(read_eeprom_float(0x20, (float *)&eeprom_value.reference_temperature));
-    ASSERT_STATUS(read_eeprom_float(0x22, (float *)&eeprom_value.k4_compansation));
-    ASSERT_STATUS(read_eeprom_float(0x24, (float *)&eeprom_value.k3_compansation));
-    ASSERT_STATUS(read_eeprom_float(0x26, (float *)&eeprom_value.k2_compansation));
-    ASSERT_STATUS(read_eeprom_float(0x28, (float *)&eeprom_value.k1_compansation));
-    ASSERT_STATUS(read_eeprom_float(0x2a, (float *)&eeprom_value.k0_compansation));
-    ASSERT_STATUS(read_eeprom_float(0x2e, (float *)&eeprom_value.k4_object));
-    ASSERT_STATUS(read_eeprom_float(0x30, (float *)&eeprom_value.k3_object));
-    ASSERT_STATUS(read_eeprom_float(0x32, (float *)&eeprom_value.k2_object));
-    ASSERT_STATUS(read_eeprom_float(0x34, (float *)&eeprom_value.k1_object));
-    ASSERT_STATUS(read_eeprom_float(0x36, (float *)&eeprom_value.k0_object));
+ 	ASSERT_STATUS(read_EE_coeff(0x00, &EE_coeff.lot_number));
+ 	ASSERT_STATUS(read_EE_coeff(0x01, &EE_coeff.serial_number));
+ 	ASSERT_STATUS(read_EE_coeff(0x1a, (uint16_t *)&EE_coeff.min_sensor_temperature));
+ 	ASSERT_STATUS(read_EE_coeff(0x1b, (uint16_t *)&EE_coeff.max_sensor_temperature));
+ 	ASSERT_STATUS(read_EE_coeff(0x1c, (uint16_t *)&EE_coeff.min_object_temperature));
+ 	ASSERT_STATUS(read_EE_coeff(0x1d, (uint16_t *)&EE_coeff.max_object_temperature));
+ 	ASSERT_STATUS(read_EE_float(0x1e, (float *)&EE_value.temperature_coefficient));
+  ASSERT_STATUS(read_EE_float(0x20, (float *)&EE_value.reference_temperature));
+  ASSERT_STATUS(read_EE_float(0x22, (float *)&EE_value.k4_compansation));
+  ASSERT_STATUS(read_EE_float(0x24, (float *)&EE_value.k3_compansation));
+  ASSERT_STATUS(read_EE_float(0x26, (float *)&EE_value.k2_compansation));
+  ASSERT_STATUS(read_EE_float(0x28, (float *)&EE_value.k1_compansation));
+  ASSERT_STATUS(read_EE_float(0x2a, (float *)&EE_value.k0_compansation));
+  ASSERT_STATUS(read_EE_float(0x2e, (float *)&EE_value.k4_object));
+  ASSERT_STATUS(read_EE_float(0x30, (float *)&EE_value.k3_object));
+  ASSERT_STATUS(read_EE_float(0x32, (float *)&EE_value.k2_object));
+  ASSERT_STATUS(read_EE_float(0x34, (float *)&EE_value.k1_object));
+  ASSERT_STATUS(read_EE_float(0x36, (float *)&EE_value.k0_object));
 
  	tsd305_coeff_read = true;
 
@@ -215,7 +215,7 @@ bool tsd305::is_connected(void) {
  * \brief Reads the temperature and pressure ADC value and compute the
  * compensated values.
  *
- * \param[out] float* : Celsius Degree temperature value
+ * \param[out] float* : Celsius DegrEE temperature value
  * \param[out] float* : mbar pressure value
  *
  * \return tsd305_status : status of TSD305
@@ -234,30 +234,30 @@ bool tsd305::is_connected(void) {
     float adc_compansation_object, adc_compansation_object_tc;
 
  	if(tsd305_coeff_read == false)
- 		ASSERT_STATUS(read_eeprom());
+ 		ASSERT_STATUS(read_EE());
 
  	ASSERT_STATUS(conversion_and_read_adcs((uint32_t *)&adc_object, (uint32_t *)&adc_sensor));
-//Calculation as per DataSheet for Sensor Temprature
- 	*temperature = (float)adc_sensor / 16777216.0f * ((float)eeprom_coeff.max_sensor_temperature - (float)eeprom_coeff.min_sensor_temperature) + (float)eeprom_coeff.min_sensor_temperature;
-//Calculation as per Datasheet for Object Temperature
+//Calculation as per DataShEEt for Sensor Temprature
+ 	*temperature = (float)adc_sensor / 16777216.0f * ((float)EE_coeff.max_sensor_temperature - (float)EE_coeff.min_sensor_temperature) + (float)EE_coeff.min_sensor_temperature;
+//Calculation as per DatashEEt for Object Temperature
     //TC_CORRECTION_FACTOR
-    tc_correction_factor = 1 + ((*temperature - (float)eeprom_value.reference_temperature) * (float)eeprom_value.temperature_coefficient);
+    tc_correction_factor = 1 + ((*temperature - (float)EE_value.reference_temperature) * (float)EE_value.temperature_coefficient);
  	//TEMPERATURE_COMPENSATION
-    temperature_compansation_offset =  ((float)(eeprom_value.k4_compansation) * (*temperature) * (*temperature) * (*temperature) * (*temperature)) + 
-                                       ((float)(eeprom_value.k3_compansation) * (*temperature) * (*temperature) * (*temperature)) +
-                                       ((float)(eeprom_value.k2_compansation) * (*temperature) * (*temperature)) +
-                                       ((float)(eeprom_value.k1_compansation) * (*temperature)) +
-                                       ((float)(eeprom_value.k0_compansation));
+    temperature_compansation_offset =  ((float)(EE_value.k4_compansation) * (*temperature) * (*temperature) * (*temperature) * (*temperature)) + 
+                                       ((float)(EE_value.k3_compansation) * (*temperature) * (*temperature) * (*temperature)) +
+                                       ((float)(EE_value.k2_compansation) * (*temperature) * (*temperature)) +
+                                       ((float)(EE_value.k1_compansation) * (*temperature)) +
+                                       ((float)(EE_value.k0_compansation));
     temperature_compansation_offset_tc = ((float)(temperature_compansation_offset) * (float)tc_correction_factor);
     //Object Temperature
     adc_compansation_object = temperature_compansation_offset_tc + (float)adc_object - 8388608.0f;      //Here, Divide by 0.9 the adc_object
     adc_compansation_object_tc = adc_compansation_object / tc_correction_factor;
 
-    *object_temperature = ((float)eeprom_value.k4_object * ((float)adc_compansation_object_tc) * ((float)adc_compansation_object_tc) * ((float)adc_compansation_object_tc) * ((float)adc_compansation_object_tc)) +
-                          ((float)eeprom_value.k3_object * ((float)adc_compansation_object_tc) * ((float)adc_compansation_object_tc) * ((float)adc_compansation_object_tc)) +
-                          ((float)eeprom_value.k2_object * ((float)adc_compansation_object_tc) * ((float)adc_compansation_object_tc)) +
-                          ((float)eeprom_value.k1_object * ((float)adc_compansation_object_tc)) +
-                          ((float)eeprom_value.k0_object);
+    *object_temperature = ((float)EE_value.k4_object * ((float)adc_compansation_object_tc) * ((float)adc_compansation_object_tc) * ((float)adc_compansation_object_tc) * ((float)adc_compansation_object_tc)) +
+                          ((float)EE_value.k3_object * ((float)adc_compansation_object_tc) * ((float)adc_compansation_object_tc) * ((float)adc_compansation_object_tc)) +
+                          ((float)EE_value.k2_object * ((float)adc_compansation_object_tc) * ((float)adc_compansation_object_tc)) +
+                          ((float)EE_value.k1_object * ((float)adc_compansation_object_tc)) +
+                          ((float)EE_value.k0_object);
     return status;
 }
  
